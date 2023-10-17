@@ -53,4 +53,16 @@ class CarServiceTest {
 		verify(carRepository).findById(expected.id());
 		assertEquals(expected, actual);
 	}
+
+	@Test
+	void updateCar() {
+		// GIVEN
+		Car expected = new Car("1", "test", "test");
+		// WHEN
+		when(carRepository.save(expected)).thenReturn(expected);
+		Car actual = carService.updateCar(expected);
+		// THEN
+		verify(carRepository).save(expected);
+		assertEquals(expected, actual);
+	}
 }

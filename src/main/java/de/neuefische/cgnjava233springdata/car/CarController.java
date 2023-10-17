@@ -17,13 +17,9 @@ public class CarController {
 		return carService.getAllCars();
 	}
 
-	@GetMapping("/{s}")
-	public Car getCarById(@PathVariable String s){
-		/*if(id == null && brand != null){
-			return carService.getCarByBrand(brand);
-		}
-		return carService.getCarById(id);*/
-		return carService.getCarByIdOrBrand(s);
+	@GetMapping("{id}")
+	public Car getCarById(@PathVariable String id){
+		return carService.getCarById(id);
 	}
 
 	@PostMapping
