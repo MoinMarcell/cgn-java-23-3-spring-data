@@ -13,8 +13,7 @@ import org.springframework.test.web.servlet.MvcResult;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -99,5 +98,24 @@ class CarControllerTest {
 		assertNotNull(savedCar.id());
 		assertNotNull(savedCar.brand());
 		assertNotNull(savedCar.color());
+	}
+
+	@Test
+	@DirtiesContext
+	void deleteCarById() throws Exception {
+		NewCar car = new NewCar("test", "test");
+		String carAsJson = objectMapper.writeValueAsString(car);
+
+		MvcResult result = mockMvc.perform(post(BASE_URI)
+						.contentType(MediaType.APPLICATION_JSON)
+						.content(carAsJson)
+				)
+				.andExpect(status().isOk())
+				.andReturn();
+
+		Car savedCar = objectMapper.readValue(result.getResponse().getContentAsString(), Car.class);
+
+		mockMvc.perform(delete(BASE_URI + "/" + savedCar.id()))
+				.andExpect(status().isOk());
 	}
 }

@@ -1,5 +1,6 @@
 package de.neuefische.cgnjava233springdata.car;
 
+import de.neuefische.cgnjava233springdata.car.exception.CarAlreadyExistException;
 import de.neuefische.cgnjava233springdata.car.exception.CarNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -14,6 +15,9 @@ public class CarService {
 	private final CarRepository carRepository;
 
 	public Car addCar(NewCar car) {
+		if(!carRepository.findCarByBrand(car.brand()).isEmpty()){
+			throw new CarAlreadyExistException("Car with brand " + car.brand() + " already Exist");
+		}
 		Car carToSave = new Car(
 				UUID.randomUUID().toString(),
 				car.brand(),
